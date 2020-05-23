@@ -24,7 +24,6 @@ void SecretNumbers::load() {
 		this->queue.push(number);
 	}
 	this->queue.close();
-	this->fileName.seekg(0);
 }
 
 uint SecretNumbers::operator()() {
@@ -33,6 +32,17 @@ uint SecretNumbers::operator()() {
 	next_number = this->queue.pop();
 	this->queue.push(next_number);
 	return next_number;
+}
+
+SecretNumbers& SecretNumbers::operator=(SecretNumbers&& other) {
+	this->queue = std::move(other.queue);
+	this->fileName = std::move(other.fileName);
+	return *this;
+}
+
+SecretNumbers::SecretNumbers(SecretNumbers&& other) {
+	this->queue = std::move(other.queue);
+	this->fileName = std::move(other.fileName);
 }
 
 SecretNumbers::~SecretNumbers() {

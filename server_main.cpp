@@ -11,6 +11,5 @@ int main(int argc, char *argv[]) {
   const std::string fileNumbers = argv[2];
   Server server(argv[1], fileNumbers);
   server.run();
-  
   return 0;
 }

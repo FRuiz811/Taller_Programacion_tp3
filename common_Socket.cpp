@@ -35,10 +35,11 @@ void Socket::resolve_address(struct addrinfo* hints,
 				break;
 		}
 		::close(this->fd);
+		this->fd = -1;
 	}
 
 	freeaddrinfo(results);
-	if(iter == nullptr) 
+	if(this->fd == -1) 
 		throw std::exception();
 	return;
 }
@@ -124,8 +125,17 @@ void Socket::shutdown(int channel) {
 	::shutdown(this->fd, channel); 
 }
 
-Socket::~Socket() {
-	if (this->fd != -1)
+void Socket::close() {
+	if (this->fd != -1){
+		shutdown(SHUT_RDWR);
 		::close(this->fd);
+	}
+}
+
+Socket::~Socket() {
+	if (this->fd != -1){
+		::shutdown(this->fd, SHUT_RDWR);
+		::close(this->fd);
+	}
 	this->fd = -1;
 }

@@ -22,7 +22,7 @@ public:
 	int send(const void* buffer, std::uint32_t length) const;
 	int recieve(void* buffer, std::uint32_t length) const;
 	void shutdown(int channel);
-
+	void close();
 	~Socket();
 
 	Socket(const Socket& other) = delete;

@@ -14,11 +14,14 @@ private:
 	void load();
 
 public:
-	explicit SecretNumbers(const std::string& numbers);
+	SecretNumbers(const std::string& numbers);
 
 	uint operator()();
 
 	~SecretNumbers();
+
+	SecretNumbers(SecretNumbers&& other);
+	SecretNumbers& operator=(SecretNumbers&& other);
 
 	SecretNumbers(const SecretNumbers& other) = delete;
 	SecretNumbers &operator=(const SecretNumbers&) = delete;

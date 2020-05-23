@@ -3,7 +3,9 @@
 
 
 Server::Server(const char* port, const std::string& fileNumbers) : 
-	numbers(fileNumbers) {
+	numbers(fileNumbers) , gamesAcceptor(port, numbers) {
+		this->gamesAcceptor.start();
+
 }
 
 void Server::run() {
@@ -13,4 +15,7 @@ void Server::run() {
 	}
 }
 
-Server::~Server() {}
+Server::~Server() {
+	this->gamesAcceptor.stop();
+	this->gamesAcceptor.join();
+}
