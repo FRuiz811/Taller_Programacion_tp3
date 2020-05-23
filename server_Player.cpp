@@ -2,8 +2,10 @@
 #include <iostream>
 #include <unistd.h>
 
-Player::Player(const uint number) : secretNumber(number) , alive(true) ,
-	keepTalking(true) {}
+#define MAX_ATTEMPS 10
+
+Player::Player(const uint number, Board& board) : secretNumber(number), 
+	alive(true), keepTalking(true), board(board), attemps(0) {}
 
 
 bool Player::is_alive() const {

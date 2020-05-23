@@ -5,6 +5,7 @@
 #include "server_SecretNumbers.h"
 #include "common_Socket.h"
 #include "server_Player.h"
+#include "server_Board.h"
 #include <vector>
 #include <atomic>
 
@@ -14,6 +15,7 @@ private:
 	SecretNumbers& secretNumbers;
 	std::vector<Player*> players;
 	std::atomic<bool> keepTalking;
+	Board board;
 
 	void clear_finished_games();
 	void stop_players();
