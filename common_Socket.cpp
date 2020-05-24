@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <stdexcept>
 #include <netdb.h>
+#include <iostream>
 #include <sys/socket.h>
 
 Socket::Socket() : fd(-1) {}
@@ -54,8 +55,7 @@ void Socket::bind_and_listen(const char* port, std::uint32_t max_waiting) {
 
 	resolve_address(&hints, nullptr, port);
 		
-	if (::listen(this->fd, max_waiting) == -1)
-		throw std::exception();
+	::listen(this->fd, max_waiting);
 	
 	return;
 }
@@ -88,7 +88,7 @@ int Socket::send(const void* buffer, std::uint32_t length) const {
 		result_send = ::send(this->fd, &char_buffer[sended_bytes],
 						   remaining_bytes, MSG_NOSIGNAL);
 		if(result_send == -1 || result_send == 0)
-			throw std::exception();
+			return result_send;
 		sended_bytes += result_send;
 		remaining_bytes -= result_send;
 	}
@@ -105,19 +105,20 @@ int Socket::recieve(void* buffer, std::uint32_t length) const {
 		result_recv = ::recv(this->fd, &char_buffer[received_bytes],
 						   remaining_bytes, 0);
 		if(result_recv == -1 || result_recv == 0)
-			throw std::exception();
+			return result_recv;
 		received_bytes += result_recv;
 		remaining_bytes -= result_recv;
 	}
 	return received_bytes;
 }
 
-Socket::Socket(Socket&& other) :fd(other.fd) {
+Socket::Socket(Socket&& other) : fd(other.fd) {
 	other.fd = -1;
 }
 
 Socket& Socket::operator=(Socket&& other) {
 	this->fd = other.fd;
+	other.fd = -1;
 	return *this;
 }
 
@@ -130,6 +131,7 @@ void Socket::close() {
 		shutdown(SHUT_RDWR);
 		::close(this->fd);
 	}
+	this->fd = -1;
 }
 
 Socket::~Socket() {

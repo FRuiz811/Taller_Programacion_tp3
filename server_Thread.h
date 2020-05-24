@@ -1,5 +1,5 @@
-#ifndef THREAD_H
-#define THREAD_H
+#ifndef SERVER_THREAD_H
+#define SERVER_THREAD_H
 
 #include <thread>
 

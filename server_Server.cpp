@@ -13,9 +13,9 @@ void Server::run() {
 	while (input != "q") {
 		std::cin >> input;
 	}
-	this->gamesAcceptor.stop();
 }
 
 Server::~Server() {
+	this->gamesAcceptor.stop();
 	this->gamesAcceptor.join();
 }

@@ -1,21 +1,80 @@
 #include "server_Player.h"
 #include <iostream>
 #include <unistd.h>
+#include "server_CommandHelp.h"
+#include "server_CommandPlay.h"
+#include "server_CommandSurrender.h"
+#include <arpa/inet.h>
 
 #define MAX_ATTEMPS 10
 
-Player::Player(const uint number, Board& board) : secretNumber(number), 
-	alive(true), keepTalking(true), board(board), attemps(0) {}
+Player::Player(Socket socket, const uint number, Board& board) :
+	secretNumber(number), keepTalking(true), board(board), attempts(0),
+	protocol() {
+		this->socket = std::move(socket);
+	}
+
+
+std::string Player::command_execute(char command) {
+	Command* commandSelected = nullptr;
+	switch(command) {
+		case 'h':
+			commandSelected = new CommandHelp();
+			break;
+		case 'n':
+		{
+			char numberAttempt[2];
+			this->socket.recieve(&numberAttempt,2);
+			uint16_t* temp16 = (uint16_t*) numberAttempt;
+			ushort number = ntohs(*temp16);
+			commandSelected = new CommandPlay(*this,this->secretNumber,number);
+			this->attempts++;
+		}
+			break;
+		case 's':
+			commandSelected = new CommandSurrender(*this);
+			break;
+		default:
+			delete commandSelected;
+			throw std::exception();
+	}
+	std::string message = commandSelected->run();
+	delete commandSelected;
+	return message;
+}
 
 
 bool Player::is_alive() const {
-	return this->alive;
+	return this->keepTalking;
 }
+
 void Player::run(){
-	std::cout << this->secretNumber <<"\n";
+	char command = '\0';
+	std::string message;
 	while(keepTalking) {
+		try{
+			this->socket.recieve(&command,1);
+			if (command == '\0')
+				break;
+			message = command_execute(command);
+			if (message != "Ganaste" && this->attempts == MAX_ATTEMPS) {
+				message = "Perdiste";
+				this->keepTalking = false;
+			}
+			std::vector<char> encoded = this->protocol.encode_string(message);
+			this->socket.send(encoded.data(), encoded.size());		
+		} catch (...) {
+			this->add_loser();
+		}
 	}
-	std::cout << this->keepTalking <<"\n";
+}
+
+void Player::add_winner() {
+	this->board.add_winner();
+}
+
+void Player::add_loser() {
+	this->board.add_loser();
 }
 
 void Player::stop() {

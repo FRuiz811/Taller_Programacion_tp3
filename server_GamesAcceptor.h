@@ -23,11 +23,11 @@ private:
 public:
 	explicit GamesAcceptor(const char* port, SecretNumbers& secretNumbers);
 
-	void run();
+	virtual void run();
 
 	void stop();
 
-	~GamesAcceptor();
+	virtual ~GamesAcceptor();
 
 };
 

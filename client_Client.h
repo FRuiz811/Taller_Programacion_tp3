@@ -14,7 +14,7 @@ private:
 	std::atomic<bool> keep_talking;
 
 	void send_message(const std::string& command);
-	
+	std::string recieve_message();
 public:
 	explicit Client(const char* host, const char* port);
 

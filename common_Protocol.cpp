@@ -21,7 +21,17 @@ std::vector<char> Protocol::encode_command(const std::string& command) {
 	return this->message;
 }
 
-std::vector<char> Protocol::decode(const std::string& message) {
+std::vector<char> Protocol::encode_string(const std::string& messageToEncode) {
+	this->message.clear();
+	size_t size = messageToEncode.size();
+	unsigned int big_endian = htonl(size);
+	char *c = (char*) &big_endian;
+	for (size_t i = 0; i < 4; i++) {
+		this->message.push_back(*(c+i));
+	}
+	for (size_t i = 0; i < messageToEncode.size(); i++) {
+		this->message.push_back(messageToEncode[i]);
+	}
 	return this->message;
 }
 
