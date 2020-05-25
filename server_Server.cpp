@@ -3,7 +3,7 @@
 #include <string>
 
 Server::Server(const char* port, const std::string& fileNumbers) : 
-	numbers(fileNumbers), board(	) , gamesAcceptor(port, numbers,board) {
+	numbers(fileNumbers), board() , gamesAcceptor(port, numbers,board) {
 		this->gamesAcceptor.start();
 }
 

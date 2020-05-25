@@ -5,7 +5,7 @@
 #include <queue>
 
 //La clase Blocking Queue permite un acceso controlado a los recursos
-//encolados para que cada uno de los consumidores saquen un recurso a la vez.
+//encolados para que cada uno de los jugadores saquen un numero a la vez.
 class BlockingQueue {
 private:
 	std::queue<uint> blocking_queue;
@@ -23,7 +23,7 @@ public:
 	
 	//Se realiza el pop del primer elemento de la queue y lo retorna. En caso 
 	//de que esté vacía, se queda esperando a que aparezca una nueva unidad
-	//del recurso. En caso de que la queue esté cerrada se retorna \0.
+	//del recurso. En caso de que la queue esté cerrada lanza una excepción.
 	uint pop();
 
 	//Se pushea el value en la cola bloqueante. Luego notifica a todos aquellos

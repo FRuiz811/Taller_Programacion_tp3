@@ -3,6 +3,8 @@
 
 #include <mutex>
 
+//Board es un Monitor que lleva las estadísticas de las partidas
+//jugadas en el server.
 class Board {
 private:
 	uint winners;

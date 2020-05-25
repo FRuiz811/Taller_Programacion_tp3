@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+//Protocol es la clase encargada de encodear el envio de los mensajes
+//que se utilizaran para la comunicación entre Server y Client.
 class Protocol {
 private:
 	std::vector<char> message;

@@ -6,9 +6,9 @@
 
 #define MAX_WAITING 20
 
-GamesAcceptor::GamesAcceptor(const char* port, SecretNumbers& secretNumbers, Board& board) :
- 	socket() , secretNumbers(secretNumbers), players(), keepTalking(true),
- 	board(board) {
+GamesAcceptor::GamesAcceptor(const char* port, SecretNumbers& secretNumbers,
+	Board& board) : socket() , secretNumbers(secretNumbers), players(),
+	keepTalking(true), board(board) {
 	this->socket.bind_and_listen(port, MAX_WAITING);
 }
 

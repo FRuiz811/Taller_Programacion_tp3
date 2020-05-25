@@ -112,7 +112,7 @@ int Socket::recieve(void* buffer, std::uint32_t length) const {
 		result_recv = ::recv(this->fd, &char_buffer[received_bytes],
 						   remaining_bytes, 0);
 		if(result_recv == -1 || result_recv == 0)
-			throw SocketException("Error al recibir desde el socket %d.",this->fd);;
+			throw SocketException("Error al recibir desde el socket %d.",this->fd);
 		received_bytes += result_recv;
 		remaining_bytes -= result_recv;
 	}
@@ -142,9 +142,5 @@ void Socket::close() {
 }
 
 Socket::~Socket() {
-	if (this->fd != -1){
-		::shutdown(this->fd, SHUT_RDWR);
-		::close(this->fd);
-	}
-	this->fd = -1;
+	this->close();
 }
