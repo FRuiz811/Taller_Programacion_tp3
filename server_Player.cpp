@@ -52,20 +52,17 @@ void Player::run(){
 	char command = '\0';
 	std::string message;
 	while(keepTalking) {
-		try{
-			this->socket.recieve(&command,1);
-			if (command == '\0')
-				break;
-			message = command_execute(command);
-			if (message != "Ganaste" && this->attempts == MAX_ATTEMPS) {
-				message = "Perdiste";
-				this->keepTalking = false;
-			}
-			std::vector<char> encoded = this->protocol.encode_string(message);
-			this->socket.send(encoded.data(), encoded.size());		
-		} catch (...) {
-			this->add_loser();
+		this->socket.recieve(&command,1);
+		if (command == '\0')
+			break;
+		message = command_execute(command);
+		if (message != "Ganaste" && this->attempts == MAX_ATTEMPS) {
+			message = "Perdiste";
+			add_loser();
+			this->keepTalking = false;
 		}
+		std::vector<char> encoded = this->protocol.encode_string(message);
+		this->socket.send(encoded.data(), encoded.size());		
 	}
 }
 

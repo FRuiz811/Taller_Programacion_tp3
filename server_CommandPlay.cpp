@@ -1,5 +1,4 @@
 #include "server_CommandPlay.h"
-#include <iostream>
 #include <sstream>
 
 CommandPlay::CommandPlay(Player& player, uint number, uint attempt) : player(player),
@@ -41,6 +40,7 @@ std::string CommandPlay::run() {
 		message << "Ganaste";
 		this->player.stop();
 		this->player.add_winner();
+		return message.str();
 	}
 	int good = check_goods(secret,numberAttempt);
 	int regular = check_regulars(secret, numberAttempt);
@@ -52,7 +52,6 @@ std::string CommandPlay::run() {
 		message << ", ";
 	if (regular != 0) 
 		message << regular << " regular";
-	std::cout << message.str() << "\n";
 	return message.str();
 }
 
