@@ -11,12 +11,12 @@ private:
 	uint secretNumber;
 	uint attempt;
 
-	int check_goods(std::string secret, std::string numberAttempt);
-	int check_regulars(std::string secret, std::string numberAttempt);
+	int check_goods(std::string secret, std::string numberAttempt) const;
+	int check_regulars(std::string secret, std::string numberAttempt) const;
 public:
 	CommandPlay(Player& player, uint secretNumber, uint attempt);
 
-	std::string run();
+	std::string execute();
 	~CommandPlay();
 };
 

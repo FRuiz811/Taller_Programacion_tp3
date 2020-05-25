@@ -17,7 +17,7 @@ public:
 	void add_winner();
 	void add_loser();
 
-	void show_results();
+	void show_results() const;
 	~Board();
 
 	Board(const Board& other) = delete;

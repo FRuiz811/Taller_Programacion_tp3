@@ -15,13 +15,13 @@ private:
 	SecretNumbers& secretNumbers;
 	std::vector<Player*> players;
 	std::atomic<bool> keepTalking;
-	Board board;
+	Board& board;
 
 	void clear_finished_games();
 	void stop_players();
 
 public:
-	explicit GamesAcceptor(const char* port, SecretNumbers& secretNumbers);
+	explicit GamesAcceptor(const char* port, SecretNumbers& secretNumbers, Board& board);
 
 	virtual void run();
 

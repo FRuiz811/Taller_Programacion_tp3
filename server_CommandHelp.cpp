@@ -3,12 +3,12 @@
 
 CommandHelp::CommandHelp() {}
 
-std::string CommandHelp::run() {
+std::string CommandHelp::execute() {
 	std::stringstream help;
-	help << "Comandos válidos:​\n\t​AYUDA: despliega la ";
-	help << "lista de comandos válidos​\n\t​RENDIRSE: pierde el juego ";
-	help << "automáticamente​\n\t​XXX: Número de 3 cifras a ser enviado al";
-	help << " servidor para adivinar el número secreto";
+	help << "Comando válidos:\n\tAYUDA: despliega la lista de comandos";
+	help << "válidos\n\tRENDIRSE: pierde el juego automáticamente\n\tXXX: ";
+	help << "Número de 3 cifras a ser enviado al servidor para adivinar ";
+	help << "el número secreto";
 	return help.str();
 }
 

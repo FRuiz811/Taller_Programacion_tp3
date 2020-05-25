@@ -15,7 +15,7 @@ void Board::add_loser() {
 	this->losers++;
 }
 
-void Board::show_results() {
+void Board::show_results() const {
 	std::cout << "Estadísticas:\n";
 	std::cout << "\tGanadores:  "<< this->winners <<"\n";
 	std::cout << "\tPerdedores: " << this->losers <<"\n";

@@ -11,7 +11,7 @@ private:
 public:
 	explicit CommandSurrender(Player& player);
 
-	std::string run();
+	std::string execute();
 	~CommandSurrender();
 };
 

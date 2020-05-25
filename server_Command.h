@@ -6,7 +6,7 @@ class Command {
 public:
 	Command();
 
-	virtual std::string run() = 0;
+	virtual std::string execute() = 0;
 	
 	virtual	~Command();
 };

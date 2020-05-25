@@ -52,9 +52,11 @@ void Socket::bind_and_listen(const char* port, std::uint32_t max_waiting) {
 	hints.ai_family = AF_INET; //IPv4
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = AI_PASSIVE;
-
-	resolve_address(&hints, nullptr, port);
-		
+	try{
+		resolve_address(&hints, nullptr, port);
+	} catch (const std::exception& e) {
+		throw std::exception();
+	}	
 	::listen(this->fd, max_waiting);
 	
 	return;
@@ -67,8 +69,11 @@ void Socket::connect(const char* host, const char* port) {
 	hints.ai_family = AF_INET; //IPv4	
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = 0;
-	resolve_address(&hints, host, port);
-
+	try{
+		resolve_address(&hints, host, port);
+	} catch (const std::exception& e) {
+		throw std::exception();
+	}	
 	return;
 }
 
@@ -88,7 +93,7 @@ int Socket::send(const void* buffer, std::uint32_t length) const {
 		result_send = ::send(this->fd, &char_buffer[sended_bytes],
 						   remaining_bytes, MSG_NOSIGNAL);
 		if(result_send == -1 || result_send == 0)
-			return result_send;
+			throw std::exception();
 		sended_bytes += result_send;
 		remaining_bytes -= result_send;
 	}
@@ -105,7 +110,7 @@ int Socket::recieve(void* buffer, std::uint32_t length) const {
 		result_recv = ::recv(this->fd, &char_buffer[received_bytes],
 						   remaining_bytes, 0);
 		if(result_recv == -1 || result_recv == 0)
-			return result_recv;
+			throw std::exception();
 		received_bytes += result_recv;
 		remaining_bytes -= result_recv;
 	}

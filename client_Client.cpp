@@ -47,7 +47,7 @@ void Client::run() {
 				this->keep_talking = false;			
 		} catch (const std::exception& e) {
 			std::cout << "Error: comando inválido." << " " <<
- 										"Escriba AYUDA para obtener ayuda\n";
+ 					"Escriba AYUDA para obtener ayuda\n";
  			syslog(LOG_CRIT, "Invalid command entered by client.\n");
 		} catch (...) {
 			syslog(LOG_CRIT, "Unknow Error");

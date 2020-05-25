@@ -1,12 +1,13 @@
 #include "server_GamesAcceptor.h"
 #include <sys/socket.h>
 #include <utility>
+#include <syslog.h>
 
 #define MAX_WAITING 20
 
-GamesAcceptor::GamesAcceptor(const char* port, SecretNumbers& secretNumbers) :
+GamesAcceptor::GamesAcceptor(const char* port, SecretNumbers& secretNumbers, Board& board) :
  	socket() , secretNumbers(secretNumbers), players(), keepTalking(true),
- 	board() {
+ 	board(board) {
 	this->socket.bind_and_listen(port, MAX_WAITING);
 }
 
@@ -38,7 +39,9 @@ void GamesAcceptor::run() {
 			player->start();
 			clear_finished_games();
 		} catch (const std::exception& e) {
-			break;
+			break; 
+		} catch (...) {
+			syslog(LOG_CRIT, "Unknow Error in GamesAcceptor.");
 		}
 	}
 }
@@ -56,7 +59,6 @@ void GamesAcceptor::stop() {
 	this->socket.shutdown(SHUT_RDWR);
 	this->socket.close();
 	stop_players();
-	this->board.show_results();
 }
 
 GamesAcceptor::~GamesAcceptor() {}

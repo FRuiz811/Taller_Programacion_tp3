@@ -39,7 +39,7 @@ std::string Player::command_execute(char command) {
 			delete commandSelected;
 			throw std::exception();
 	}
-	std::string message = commandSelected->run();
+	std::string message = commandSelected->execute();
 	delete commandSelected;
 	return message;
 }
@@ -53,17 +53,22 @@ void Player::run(){
 	char command = '\0';
 	std::string message;
 	while(keepTalking) {
-		this->socket.recieve(&command,1);
-		if (command == '\0')
-			break;
-		message = command_execute(command);
-		if (message != "Ganaste" && this->attempts == MAX_ATTEMPS) {
-			message = "Perdiste";
-			add_loser();
-			this->keepTalking = false;
+		try{
+			this->socket.recieve(&command,1);
+			if (command == '\0')
+				break;
+			message = command_execute(command);
+			if (message != "Ganaste" && this->attempts == MAX_ATTEMPS) {
+				message = "Perdiste";
+				add_loser();
+				this->keepTalking = false;
+			}
+			std::vector<char> encoded = this->protocol.encode_string(message);
+			this->socket.send(encoded.data(), encoded.size());		
+		} catch(const std::exception& e) {
+				add_loser();
+				this->keepTalking = false;
 		}
-		std::vector<char> encoded = this->protocol.encode_string(message);
-		this->socket.send(encoded.data(), encoded.size());		
 	}
 }
 

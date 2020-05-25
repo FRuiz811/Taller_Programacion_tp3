@@ -16,11 +16,14 @@ void SecretNumbers::load() {
 		if (number_read[0] == number_read[1] ||
 			number_read[0] == number_read[2] ||
 			number_read[1] == number_read[2]) {
-			throw std::exception();
+			std::string error_format = "Error en el formato de " + number_read;
+			throw std::invalid_argument(error_format);
 		}
 		number = std::stoi(number_read);
-		if (number < 100 || number > 999)
-			throw std::exception();
+		if (number < 100 || number > 999) {
+			std::string error_range = number_read + " no está en el rango correcto";
+			throw std::out_of_range(error_range);
+		}
 		this->queue.push(number);
 	}
 	this->queue.close();

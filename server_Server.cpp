@@ -3,7 +3,7 @@
 #include <string>
 
 Server::Server(const char* port, const std::string& fileNumbers) : 
-	numbers(fileNumbers) , gamesAcceptor(port, numbers) {
+	numbers(fileNumbers), board(	) , gamesAcceptor(port, numbers,board) {
 		this->gamesAcceptor.start();
 }
 
@@ -12,9 +12,10 @@ void Server::run() {
 	while (input != "q") {
 		std::cin >> input;
 	}
+	this->gamesAcceptor.stop();
+	this->board.show_results();
 }
 
 Server::~Server() {
-	this->gamesAcceptor.stop();
 	this->gamesAcceptor.join();
 }

@@ -8,7 +8,7 @@ class CommandHelp: public Command {
 public:
 	CommandHelp();
 
-	std::string run();
+	std::string execute();
 	
 	~CommandHelp();
 };

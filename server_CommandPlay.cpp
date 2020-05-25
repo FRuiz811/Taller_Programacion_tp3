@@ -4,7 +4,8 @@
 CommandPlay::CommandPlay(Player& player, uint number, uint attempt) :
 	player(player), secretNumber(number), attempt(attempt) {}
 
-int CommandPlay::check_goods(std::string secret, std::string numberAttempt) {
+int CommandPlay::check_goods(std::string secret, 
+														 std::string numberAttempt) const {
 	int good = 0;
 	for (int i = 0; i < 3; i++) {
 		if (secret[i] == numberAttempt[i])		
@@ -14,7 +15,7 @@ int CommandPlay::check_goods(std::string secret, std::string numberAttempt) {
 }
 
 int CommandPlay::check_regulars(std::string secret, 
-															 std::string numberAttempt) {
+															 std::string numberAttempt) const {
 	int regular = 0;
 	if (numberAttempt[0] == secret[1] || numberAttempt[0] == secret[2]) 
 		regular++;
@@ -25,7 +26,7 @@ int CommandPlay::check_regulars(std::string secret,
 	return regular;
 }
 
-std::string CommandPlay::run() {
+std::string CommandPlay::execute() {
 	std::string secret = std::to_string(this->secretNumber);
 	std::string numberAttempt = std::to_string(this->attempt);
 	std::stringstream message;
