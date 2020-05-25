@@ -5,7 +5,6 @@
 #include <unistd.h>
 #include <stdexcept>
 #include <netdb.h>
-#include <iostream>
 #include <sys/socket.h>
 
 Socket::Socket() : fd(-1) {}
