@@ -2,6 +2,7 @@
 #include <sys/socket.h>
 #include <utility>
 #include <syslog.h>
+#include "common_SocketException.h"
 
 #define MAX_WAITING 20
 
@@ -38,10 +39,15 @@ void GamesAcceptor::run() {
 			this->players.push_back(player);
 			player->start();
 			clear_finished_games();
+		} catch (const SocketException& e) {
+			syslog(LOG_CRIT, "Error socket: %s", e.what());
+			break;
 		} catch (const std::exception& e) {
+			syslog(LOG_CRIT, "%s", e.what());
 			break; 
 		} catch (...) {
 			syslog(LOG_CRIT, "Unknow Error in GamesAcceptor.");
+			break;
 		}
 	}
 }

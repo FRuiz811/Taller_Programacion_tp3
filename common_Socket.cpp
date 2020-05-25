@@ -1,4 +1,5 @@
 #include "common_Socket.h"
+#include "common_SocketException.h"
 #include <utility>
 #include <cstring>
 #include <unistd.h>
@@ -17,7 +18,7 @@ void Socket::resolve_address(struct addrinfo* hints,
 	int val = 1;
 	if (getaddrinfo(host, port, hints, &results) != 0) {
 		freeaddrinfo(results);
-		throw std::exception();
+		throw SocketException("Error al obtener en getaddrinfo.");
 	}
 	
 	for (iter = results; iter != nullptr; iter = iter->ai_next) {
@@ -41,7 +42,7 @@ void Socket::resolve_address(struct addrinfo* hints,
 
 	freeaddrinfo(results);
 	if(this->fd == -1) 
-		throw std::exception();
+		throw SocketException("No se pudo conectar a ningún file descriptor");
 	return;
 }
 
@@ -54,8 +55,8 @@ void Socket::bind_and_listen(const char* port, std::uint32_t max_waiting) {
 	hints.ai_flags = AI_PASSIVE;
 	try{
 		resolve_address(&hints, nullptr, port);
-	} catch (const std::exception& e) {
-		throw std::exception();
+	} catch (const SocketException& e) {
+		throw SocketException("Error al realizar el bind al puerto %s", port);
 	}	
 	::listen(this->fd, max_waiting);
 	
@@ -71,16 +72,17 @@ void Socket::connect(const char* host, const char* port) {
 	hints.ai_flags = 0;
 	try{
 		resolve_address(&hints, host, port);
-	} catch (const std::exception& e) {
-		throw std::exception();
-	}	
+	} catch (const SocketException& e) {
+		throw SocketException("Error al conectarse al host %s y puerto %s",
+							 host, port);
+	}
 	return;
 }
 
 Socket Socket::accept() {
 	int new_fd = ::accept(this->fd, nullptr, nullptr);
 	if (new_fd == -1)
-		throw std::exception();
+		throw SocketException("Error al intentar aceptar un nuevo cliente");
 	return std::move(Socket(new_fd));
 }
 
@@ -93,7 +95,7 @@ int Socket::send(const void* buffer, std::uint32_t length) const {
 		result_send = ::send(this->fd, &char_buffer[sended_bytes],
 						   remaining_bytes, MSG_NOSIGNAL);
 		if(result_send == -1 || result_send == 0)
-			throw std::exception();
+			throw SocketException("Error al enviar desde el socket %d.",this->fd);
 		sended_bytes += result_send;
 		remaining_bytes -= result_send;
 	}
@@ -110,7 +112,7 @@ int Socket::recieve(void* buffer, std::uint32_t length) const {
 		result_recv = ::recv(this->fd, &char_buffer[received_bytes],
 						   remaining_bytes, 0);
 		if(result_recv == -1 || result_recv == 0)
-			throw std::exception();
+			throw SocketException("Error al recibir desde el socket %d.",this->fd);;
 		received_bytes += result_recv;
 		remaining_bytes -= result_recv;
 	}

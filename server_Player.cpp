@@ -2,10 +2,12 @@
 #include "server_CommandHelp.h"
 #include "server_CommandPlay.h"
 #include "server_CommandSurrender.h"
+#include "common_SocketException.h"
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <utility>
 #include <vector>
+#include <syslog.h>
 
 #define MAX_ATTEMPS 10
 
@@ -37,7 +39,8 @@ std::string Player::command_execute(char command) {
 			break;
 		default:
 			delete commandSelected;
-			throw std::exception();
+			std::string error = "El comando ingresado es incorrecto " + command;
+			throw std::invalid_argument(error);
 	}
 	std::string message = commandSelected->execute();
 	delete commandSelected;
@@ -65,9 +68,16 @@ void Player::run(){
 			}
 			std::vector<char> encoded = this->protocol.encode_string(message);
 			this->socket.send(encoded.data(), encoded.size());		
-		} catch(const std::exception& e) {
+		} catch (const SocketException& e) {
+			add_loser();
+			this->keepTalking = false;
+			syslog(LOG_INFO, "El cliente se fue: %s", e.what());
+	  }	catch (const std::exception& e) {
 				add_loser();
 				this->keepTalking = false;
+				syslog(LOG_CRIT, "Error: %s", e.what());
+		} catch(...) {
+			syslog(LOG_CRIT, "Unknow Error in Player.");
 		}
 	}
 }

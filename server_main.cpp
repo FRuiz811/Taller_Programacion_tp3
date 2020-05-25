@@ -21,6 +21,7 @@ int main(int argc, char *argv[]) {
   } catch (const std::out_of_range& e) {
   	std::cerr << "Error: archivo con números fuera de rango\n";
   	syslog(LOG_CRIT, "Invalid number format in file.\n");
+  	return 1;
   } catch (...) {
   	syslog(LOG_CRIT, "Unknow Error in server.");
   	return 1;
