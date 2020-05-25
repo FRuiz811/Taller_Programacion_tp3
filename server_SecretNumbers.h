@@ -14,7 +14,7 @@ private:
 	void load();
 
 public:
-	SecretNumbers(const std::string& numbers);
+	explicit SecretNumbers(const std::string& numbers);
 
 	uint operator()();
 
@@ -25,7 +25,6 @@ public:
 
 	SecretNumbers(const SecretNumbers& other) = delete;
 	SecretNumbers &operator=(const SecretNumbers&) = delete;
-
 };
 
 #endif

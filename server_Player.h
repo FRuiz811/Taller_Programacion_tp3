@@ -3,10 +3,11 @@
 
 #include "server_Thread.h"
 #include "common_Socket.h"
-#include <atomic>
 #include "server_Board.h"
 #include "server_Command.h"
 #include "common_Protocol.h"
+#include <atomic>
+#include <string>
 
 class Player : public Thread {
 private:

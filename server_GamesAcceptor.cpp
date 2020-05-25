@@ -1,5 +1,6 @@
 #include "server_GamesAcceptor.h"
 #include <sys/socket.h>
+#include <utility>
 
 #define MAX_WAITING 20
 
@@ -12,14 +13,14 @@ GamesAcceptor::GamesAcceptor(const char* port, SecretNumbers& secretNumbers) :
 void GamesAcceptor::clear_finished_games() {
 	std::vector<Player*> temp;
 	std::vector<Player*>::iterator it = this->players.begin();
-	for (;it != this->players.end(); ++it) {
+	for (; it != this->players.end(); ++it) {
 		if ((*it)->is_alive()){
 			temp.push_back(*it);
 		}
 	}
 	this->players.swap(temp);
 	it = temp.begin();
-	for (;it != temp.end(); ++it) {
+	for (; it != temp.end(); ++it) {
 		if (!(*it)->is_alive()) {
 			(*it)->join();
 			delete (*it);
@@ -31,7 +32,8 @@ void GamesAcceptor::run() {
 	while (this->keepTalking){
 		try{
 			Socket socketPlayer = this->socket.accept();
-			Player* player = new Player(std::move(socketPlayer), secretNumbers(), this->board);
+			Player* player = new Player(std::move(socketPlayer), secretNumbers(),
+																	this->board);
 			this->players.push_back(player);
 			player->start();
 			clear_finished_games();

@@ -9,7 +9,7 @@ class CommandSurrender: public Command {
 private:
 	Player& player;
 public:
-	CommandSurrender(Player& player);
+	explicit CommandSurrender(Player& player);
 
 	std::string run();
 	~CommandSurrender();

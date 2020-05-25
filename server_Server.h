@@ -3,6 +3,7 @@
 
 #include "server_SecretNumbers.h"
 #include "server_GamesAcceptor.h"
+#include <string>
 
 class Server {
 private:
@@ -14,7 +15,6 @@ public:
 	void run();
 
 	~Server();
-
 };
 
 #endif

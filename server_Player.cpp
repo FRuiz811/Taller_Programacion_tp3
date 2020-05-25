@@ -1,10 +1,11 @@
 #include "server_Player.h"
-#include <iostream>
-#include <unistd.h>
 #include "server_CommandHelp.h"
 #include "server_CommandPlay.h"
 #include "server_CommandSurrender.h"
+#include <unistd.h>
 #include <arpa/inet.h>
+#include <utility>
+#include <vector>
 
 #define MAX_ATTEMPS 10
 
@@ -78,6 +79,4 @@ void Player::stop() {
 	this->keepTalking = false;
 }
 
-Player::~Player() {
-
-}
+Player::~Player() {}

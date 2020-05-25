@@ -4,6 +4,7 @@
 #include <sys/socket.h>
 #include <syslog.h>
 #include <arpa/inet.h>
+#include <vector>
 
 #define BUFFER_SIZE 256
 

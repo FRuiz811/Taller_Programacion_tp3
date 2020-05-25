@@ -1,8 +1,8 @@
 #include "server_CommandPlay.h"
 #include <sstream>
 
-CommandPlay::CommandPlay(Player& player, uint number, uint attempt) : player(player),
-	secretNumber(number), attempt(attempt) {}
+CommandPlay::CommandPlay(Player& player, uint number, uint attempt) :
+	player(player), secretNumber(number), attempt(attempt) {}
 
 int CommandPlay::check_goods(std::string secret, std::string numberAttempt) {
 	int good = 0;

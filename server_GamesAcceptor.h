@@ -28,7 +28,6 @@ public:
 	void stop();
 
 	virtual ~GamesAcceptor();
-
 };
 
 #endif
