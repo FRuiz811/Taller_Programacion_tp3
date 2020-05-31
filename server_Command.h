@@ -4,11 +4,11 @@
 #include <string>
 class Command {
 public:
-	Command();
+	Command() {}
 
 	virtual std::string execute() = 0;
 	
-	virtual	~Command();
+	virtual	~Command() {}
 };
 
 #endif

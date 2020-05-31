@@ -1,6 +1,7 @@
 #include "common_Protocol.h"
 #include <string>
 #include <arpa/inet.h>
+#include <utility>
 
 Protocol::Protocol() : message() {}
 
@@ -18,7 +19,7 @@ std::vector<char> Protocol::encode_command(const std::string& command) {
 		this->message.push_back(*c);
 		this->message.push_back(*(c+1));
 	}
-	return this->message;
+	return std::move(this->message);
 }
 
 std::vector<char> Protocol::encode_string(const std::string& messageToEncode) {
@@ -32,7 +33,7 @@ std::vector<char> Protocol::encode_string(const std::string& messageToEncode) {
 	for (size_t i = 0; i < messageToEncode.size(); i++) {
 		this->message.push_back(messageToEncode[i]);
 	}
-	return this->message;
+	return std::move(this->message);
 }
 
 Protocol::~Protocol() {}

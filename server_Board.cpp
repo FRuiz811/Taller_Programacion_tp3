@@ -16,17 +16,20 @@ void Board::add_loser() {
 }
 
 void Board::show_results() const {
+	std::unique_lock<std::mutex> lock(m);
 	std::cout << "Estadísticas:\n";
 	std::cout << "\tGanadores:  "<< this->winners <<"\n";
 	std::cout << "\tPerdedores: " << this->losers <<"\n";
 }
 
 Board::Board(Board&& other) {
+	std::unique_lock<std::mutex> lock(m);
 	this->winners = std::move(other.winners);
 	this->losers = std::move(other.losers);
 }
 
 Board& Board::operator=(Board&& other) {
+	std::unique_lock<std::mutex> lock(m);
 	this->winners = std::move(other.winners);
 	this->losers = std::move(other.losers);
 	return *this;

@@ -3,15 +3,16 @@
 #include <mutex>
 #include <condition_variable>
 #include <queue>
+#include <atomic>
 
 //La clase Blocking Queue permite un acceso controlado a los recursos
 //encolados para que cada uno de los jugadores saquen un numero a la vez.
 class BlockingQueue {
 private:
 	std::queue<uint> blocking_queue;
-    std::mutex m;
+    mutable std::mutex m;
     std::condition_variable cv;
-    bool isClosed = false;
+    std::atomic<bool> isClosed;
     
 public:
 	//Constructores para la clase Blocking Queue, se permite el constructor

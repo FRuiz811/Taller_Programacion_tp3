@@ -23,6 +23,7 @@ public:
 	//cifras repetidas lanzará una excepción del tipo std::invalid_argument.
 	//En caso de que el intento sea correcto, devolverá el resultado del mismo.
 	std::string execute();
+	
 	~CommandPlay();
 };
 

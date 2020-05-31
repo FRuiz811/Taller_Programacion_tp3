@@ -9,7 +9,7 @@ class Board {
 private:
 	uint winners;
 	uint losers;
-	std::mutex m;
+	mutable std::mutex m;
 	
 public:
 	Board();
