@@ -16,6 +16,7 @@ private:
 	BlockingQueue queue;
 	std::ifstream fileName;
 	std::mutex m;
+	
 	//Si el número del archivo no está dentro del rango entre 100 y 999
 	//se lanzará una excepción del tipo std::out_of_range. Si el número tiene
 	//cifras repetidas lanzará una excepción del tipo std::invalid_argument.

@@ -5,6 +5,8 @@
 #include "common_SocketException.h"
 
 #define MAX_WAITING 20
+#define UNKNOW_ERROR "Unknow Error in GamesAcceptor."
+#define SOCKET_ERROR "Error Socket: %s"
 
 GamesAcceptor::GamesAcceptor(const char* port, SecretNumbers& secretNumbers,
 	Board& board) : socket() , secretNumbers(secretNumbers), players(),
@@ -40,13 +42,13 @@ void GamesAcceptor::run() {
 			player->start();
 			clear_finished_games();
 		} catch (const SocketException& e) {
-			syslog(LOG_CRIT, "Error socket: %s", e.what());
+			syslog(LOG_CRIT, SOCKET_ERROR, e.what());
 			break;
 		} catch (const std::exception& e) {
 			syslog(LOG_CRIT, "%s", e.what());
 			break; 
 		} catch (...) {
-			syslog(LOG_CRIT, "Unknow Error in GamesAcceptor.");
+			syslog(LOG_CRIT, UNKNOW_ERROR);
 			break;
 		}
 	}

@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 
+#define EXIT "q"
+
 Server::Server(const char* port, const std::string& fileNumbers) : 
 	numbers(fileNumbers), board() , gamesAcceptor(port, numbers,board) {
 		this->gamesAcceptor.start();
@@ -9,7 +11,7 @@ Server::Server(const char* port, const std::string& fileNumbers) :
 
 void Server::run() {
 	std::string input;
-	while (input != "q") {
+	while (input != EXIT) {
 		std::cin >> input;
 	}
 	this->gamesAcceptor.stop();

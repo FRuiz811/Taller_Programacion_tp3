@@ -11,6 +11,7 @@ private:
 	std::vector<char> message;
 public:
 	Protocol();
+	
 	//Al comando recibido como parámetro lo encodea a su letra correspondiente
 	//En caso de que sea un número, colocará su respectiva letra y luego lo 
 	//intentará convertir a un short int en formato big endian y en caso que  

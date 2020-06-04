@@ -15,6 +15,7 @@ private:
 	SecretNumbers numbers;
 	Board board;
 	GamesAcceptor gamesAcceptor;
+	
 public:
 	//Es el único constructor de la clase, se le indica el puerto por el
 	//cual escuchará a sus clientes y el nombre del archivo a abrir.

@@ -7,6 +7,14 @@
 #include <netdb.h>
 #include <sys/socket.h>
 
+#define FAIL_FD "No se pudo conectar a ningún file descriptor."
+#define FAIL_GETADRR "Error en getaddrinfo."
+#define FAIL_BIND "Error al realizar el bind al puerto %s."
+#define FAIL_CONNECT "Error al conectarse al host %s y puerto %s."
+#define FAIL_ACCEPT "Error al intentar aceptar un nuevo cliente."
+#define FAIL_SEND "Error al enviar desde el socket %d."
+#define FAIL_RECV "Error al recibir desde el socket %d."
+
 Socket::Socket() : fd(-1) {}
 
 Socket::Socket(int fd) : fd(fd) {}
@@ -17,7 +25,7 @@ void Socket::resolve_address(struct addrinfo* hints,
 	int val = 1;
 	if (getaddrinfo(host, port, hints, &results) != 0) {
 		freeaddrinfo(results);
-		throw SocketException("Error al obtener en getaddrinfo.");
+		throw SocketException(FAIL_GETADRR);
 	}
 	
 	for (iter = results; iter != nullptr; iter = iter->ai_next) {
@@ -41,7 +49,7 @@ void Socket::resolve_address(struct addrinfo* hints,
 
 	freeaddrinfo(results);
 	if(this->fd == -1) 
-		throw SocketException("No se pudo conectar a ningún file descriptor");
+		throw SocketException(FAIL_FD);
 	return;
 }
 
@@ -55,7 +63,7 @@ void Socket::bind_and_listen(const char* port, std::uint32_t max_waiting) {
 	try{
 		resolve_address(&hints, nullptr, port);
 	} catch (const SocketException& e) {
-		throw SocketException("Error al realizar el bind al puerto %s", port);
+		throw SocketException(FAIL_BIND, port);
 	}	
 	::listen(this->fd, max_waiting);
 	
@@ -72,8 +80,7 @@ void Socket::connect(const char* host, const char* port) {
 	try{
 		resolve_address(&hints, host, port);
 	} catch (const SocketException& e) {
-		throw SocketException("Error al conectarse al host %s y puerto %s",
-							 host, port);
+		throw SocketException(FAIL_CONNECT, host, port);
 	}
 	return;
 }
@@ -81,7 +88,7 @@ void Socket::connect(const char* host, const char* port) {
 Socket Socket::accept() {
 	int new_fd = ::accept(this->fd, nullptr, nullptr);
 	if (new_fd == -1)
-		throw SocketException("Error al intentar aceptar un nuevo cliente");
+		throw SocketException(FAIL_ACCEPT);
 	return std::move(Socket(new_fd));
 }
 
@@ -94,7 +101,7 @@ int Socket::send(const void* buffer, std::uint32_t length) const {
 		result_send = ::send(this->fd, &char_buffer[sended_bytes],
 						   remaining_bytes, MSG_NOSIGNAL);
 		if(result_send == -1 || result_send == 0)
-			throw SocketException("Error al enviar desde el socket %d.",this->fd);
+			throw SocketException(FAIL_SEND, this->fd);
 		sended_bytes += result_send;
 		remaining_bytes -= result_send;
 	}
@@ -111,7 +118,7 @@ int Socket::recieve(void* buffer, std::uint32_t length) const {
 		result_recv = ::recv(this->fd, &char_buffer[received_bytes],
 						   remaining_bytes, 0);
 		if(result_recv == -1 || result_recv == 0)
-			throw SocketException("Error al recibir desde el socket %d.",this->fd);
+			throw SocketException(FAIL_RECV,this->fd);
 		received_bytes += result_recv;
 		remaining_bytes -= result_recv;
 	}

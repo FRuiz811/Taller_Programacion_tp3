@@ -10,6 +10,15 @@
 #include <syslog.h>
 
 #define MAX_ATTEMPS 10
+#define COMMAND_HELP 'h'
+#define COMMAND_SURRENDER 's'
+#define COMMAND_PLAY 'n'
+#define INVALID_COMMAND "Error comando ingresado incorrecto: "
+#define LOSER "Perdiste"
+#define WINNER "Ganaste"
+#define UNKNOW_ERROR "Unknow error in Player"
+#define ERROR "Error: %s"
+#define CLIENT_OUT "El cliente se fue: %s"
 
 Player::Player(Socket socket, const uint number, Board& board) :
 	secretNumber(number), keepTalking(true), board(board), attempts(0),
@@ -21,10 +30,10 @@ Player::Player(Socket socket, const uint number, Board& board) :
 std::string Player::command_execute(char command) {
 	Command* commandSelected = nullptr;
 	switch(command) {
-		case 'h':
+		case COMMAND_HELP:
 			commandSelected = new CommandHelp();
 			break;
-		case 'n':
+		case COMMAND_PLAY:
 		{
 			char numberAttempt[2];
 			this->socket.recieve(&numberAttempt,2);
@@ -34,12 +43,12 @@ std::string Player::command_execute(char command) {
 			this->attempts++;
 		}
 			break;
-		case 's':
+		case COMMAND_SURRENDER:
 			commandSelected = new CommandSurrender(*this);
 			break;
 		default:
 			delete commandSelected;
-			std::string error = "El comando ingresado es incorrecto " + command;
+			std::string error = INVALID_COMMAND + command;
 			throw std::invalid_argument(error);
 	}
 	std::string message = commandSelected->execute();
@@ -61,8 +70,8 @@ void Player::run(){
 			if (command == '\0')
 				break;
 			message = command_execute(command);
-			if (message != "Ganaste" && this->attempts == MAX_ATTEMPS) {
-				message = "Perdiste";
+			if (message != WINNER && this->attempts == MAX_ATTEMPS) {
+				message = LOSER;
 				add_loser();
 				this->keepTalking = false;
 			}
@@ -71,13 +80,13 @@ void Player::run(){
 		} catch (const SocketException& e) {
 			add_loser();
 			this->keepTalking = false;
-			syslog(LOG_INFO, "El cliente se fue: %s", e.what());
+			syslog(LOG_INFO, CLIENT_OUT, e.what());
 	  }	catch (const std::exception& e) {
 				add_loser();
 				this->keepTalking = false;
-				syslog(LOG_CRIT, "Error: %s", e.what());
+				syslog(LOG_CRIT, ERROR, e.what());
 		} catch(...) {
-			syslog(LOG_CRIT, "Unknow Error in Player.");
+			syslog(LOG_CRIT, UNKNOW_ERROR);
 		}
 	}
 }

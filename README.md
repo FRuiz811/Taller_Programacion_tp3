@@ -69,3 +69,26 @@ CTRL+C. Esto hacía que la partida que se esté jugando contra ese cliente quede
 en el olvido. Por lo tanto, asumí que si un cliente se cierra como CTRL+C 
 pierde la partida automáticamente y en el tablero de las estadíasticas se 
 agrega un perdedor más.
+
+
+## Correcciones Segunda Entrega
+
++ Se agregó el uso de macros para textos. Se documentó los métodos que no 
+tenían su documentación correspondiente y la clase Command quedó inline debido 
+a que los métodos estaban vacíos. También se devuelven los mensajes encodeados 
+por el protocolo por movimiento.
+
++ Se eliminó el uso del buffer de tamaño fijo. Se cambió el momento de creación
+del vector y queda ligado a aquello que se recibe en los primeros 4 bytes del 
+mensaje, estos indican la longitud que tendrá el mensaje a continuación. Por lo
+tanto, se crea el vector con ese tamaño + 1 y se lo inicializa en 0.
+
++ Se agregaron locks en funciones que no estaban siendo atómicas y que se les 
+permitía a otros threads realizar modificaciones sobre ciertas variables que 
+estaban sido mostradas por estas funciones. Se agregó la keyword mutable a los 
+mutex para no perder la condición de que el método sea constante, como por 
+ejemplo en Board::show_results(), BlockingQueue:is_open() y 
+BlockingQueue::empty().
+
++ En algunos constructores por movimiento, se los hicieron atómicos para 
+evitar que se hagan modificaciones al momento de estar moviendolo.

@@ -3,6 +3,9 @@
 #include <fstream>
 #include <utility>
 
+#define INVALID_FORMAT "Error en el formato de: "
+#define INVALID_RANGE "No está en el rango correcto: "
+
 SecretNumbers::SecretNumbers(const std::string& numbers) : queue(), 
 	fileName(numbers, std::ifstream::in) {
 		load();
@@ -16,12 +19,12 @@ void SecretNumbers::load() {
 		if (number_read[0] == number_read[1] ||
 			number_read[0] == number_read[2] ||
 			number_read[1] == number_read[2]) {
-			std::string error_format = "Error en el formato de " + number_read;
+			std::string error_format = INVALID_FORMAT + number_read;
 			throw std::invalid_argument(error_format);
 		}
 		number = std::stoi(number_read);
 		if (number < 100 || number > 999) {
-			std::string error_range = number_read + " no está en el rango correcto";
+			std::string error_range = INVALID_RANGE + number_read;
 			throw std::out_of_range(error_range);
 		}
 		this->queue.push(number);

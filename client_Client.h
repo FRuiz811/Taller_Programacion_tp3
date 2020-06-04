@@ -22,6 +22,7 @@ private:
 
 	//Devolverá como string el mensaje recibido por el servidor.
 	std::string recieve_message();
+	
 public:
 	//Se conectará al host y port indicado como parámetros para poder jugar
 	//contra el servidor.

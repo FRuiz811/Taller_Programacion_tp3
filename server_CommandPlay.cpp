@@ -1,6 +1,9 @@
 #include "server_CommandPlay.h"
 #include <sstream>
 
+#define INVALID_NUMBER "Número inválido. Debe ser de 3 cifras no repetidas"
+#define WINNER "Ganaste"
+
 CommandPlay::CommandPlay(Player& player, uint number, uint attempt) :
 	player(player), secretNumber(number), attempt(attempt) {}
 
@@ -34,11 +37,11 @@ std::string CommandPlay::execute() {
 			numberAttempt[0] == numberAttempt[1] ||
 			numberAttempt[0] == numberAttempt[2] ||
 			numberAttempt[1] == numberAttempt[2]) {
-				message << "Número inválido. Debe ser de 3 cifras no repetidas";
+				message << INVALID_NUMBER;
 				return message.str();
 			}
 	if (this->secretNumber == this->attempt) {
-		message << "Ganaste";
+		message << WINNER;
 		this->player.stop();
 		this->player.add_winner();
 		return message.str();
